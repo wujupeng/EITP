@@ -1,0 +1,22 @@
+[package]
+name = "eitp-agent"
+version = "0.1.0"
+edition = "2021"
+description = "EITP Rust Agent - 备份/迁移数据流执行端"
+
+[dependencies]
+tokio = { version = "1.40", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.12", features = ["json"] }
+uuid = { version = "1.10", features = ["v4", "serde"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+anyhow = "1.0"
+toml = "0.8"
+tokio-postgres = "0.7"
+futures = "0.3"
+
+[profile.release]
+opt-level = 3
+lto = true

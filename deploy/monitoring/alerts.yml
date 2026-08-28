@@ -1,0 +1,68 @@
+# EITP 告警规则
+
+groups:
+  - name: eitp-tenant
+    rules:
+      # 租户上下文解析延迟
+      - alert: TenantContextSlow
+        expr: eitp_tenant_context_resolution_ms > 20
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "租户上下文解析超 20ms ({{ $value }}ms)"
+          description: "C-PERF-01 违规：租户上下文识别应 ≤20ms"
+
+      # 跨公司汇总延迟
+      - alert: CrossCompanySummarySlow
+        expr: eitp_cross_company_summary_ms > 3000
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "跨公司汇总超 3s ({{ $value }}ms)"
+          description: "C-PERF-03 违规：跨 20 家公司汇总应 ≤3s"
+
+  - name: eitp-availability
+    rules:
+      # 后端不可用
+      - alert: BackendDown
+        expr: up{job="eitp-backend"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "应用面后端不可达"
+          description: "FastAPI 实例 {{ $labels.instance }} 已离线 30s"
+
+      # 控制面不可用
+      - alert: ControlPlaneDown
+        expr: up{job="eitp-control-plane"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "控制面不可达"
+          description: "Go 控制面实例 {{ $labels.instance }} 已离线 30s"
+
+  - name: eitp-isolation
+    rules:
+      # 跨租户恢复尝试
+      - alert: CrossTenantRestoreAttempt
+        expr: rate(eitp_cross_tenant_restore_denied_total[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "检测到跨租户恢复尝试"
+          description: "安全事件：跨租户恢复被拒绝，需审计调查"
+
+      # 集团只读边界违反
+      - alert: GroupReadonlyViolation
+        expr: rate(eitp_group_readonly_violation_total[5m]) > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "集团只读边界被违反"
+          description: "集团管理员尝试写操作被拒绝"

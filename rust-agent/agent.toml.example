@@ -1,0 +1,4 @@
+control_plane_url = "http://localhost:8090"
+platform_token = "change-me-in-production"
+postgres_url = "postgres://eitp:eitp@localhost:5432/eitp"
+backup_storage_path = "./backups"
