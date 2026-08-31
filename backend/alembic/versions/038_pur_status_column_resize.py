@@ -18,7 +18,6 @@ depends_on = None
 _PUR_STATUS_TABLES = [
     "pur_supplier",
     "pur_quotation",
-    "pur_supplier_evaluation",
     "pur_purchase_request",
     "pur_purchase_order",
     "pur_asn",
