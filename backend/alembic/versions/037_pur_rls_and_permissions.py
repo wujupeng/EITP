@@ -44,34 +44,34 @@ def upgrade() -> None:
     op.execute("REVOKE INSERT, UPDATE, DELETE ON wms_inventory_position FROM pur_service_role")
 
     op.execute("""
-        INSERT INTO iam_permission (permission_code, permission_name, module, description)
+        INSERT INTO iam_permission (id, code, name, module, description)
         VALUES
-            ('pur:supplier:manage', '供应商管理', 'pur', '企业级 - 管理供应商档案/供货范围'),
-            ('pur:supplier:query', '查询供应商', 'pur', '企业级 - 查询供应商列表与详情'),
-            ('pur:quotation:manage', '报价单管理', 'pur', '企业级 - 管理供应商报价单'),
-            ('pur:evaluation:manage', '供应商评估', 'pur', '企业级 - 供应商绩效评估'),
-            ('pur:request:create', '创建采购申请', 'pur', '企业级 - 发起采购申请'),
-            ('pur:request:approve', '审批采购申请', 'pur', '企业级 - 审批采购申请'),
-            ('pur:request:query', '查询采购申请', 'pur', '企业级 - 查询采购申请列表'),
-            ('pur:order:create', '创建采购订单', 'pur', '企业级 - 创建采购订单'),
-            ('pur:order:approve', '审批采购订单', 'pur', '企业级 - 审批采购订单'),
-            ('pur:order:send', '发送采购订单', 'pur', '企业级 - 发送采购订单给供应商'),
-            ('pur:order:change', '变更采购订单', 'pur', '企业级 - 变更已审批采购订单'),
-            ('pur:order:cancel', '取消采购订单', 'pur', '企业级 - 取消采购订单'),
-            ('pur:order:close', '关闭采购订单', 'pur', '企业级 - 关闭已完成的采购订单'),
-            ('pur:order:query', '查询采购订单', 'pur', '企业级 - 查询采购订单列表与详情'),
-            ('pur:asn:manage', '管理到货通知', 'pur', '企业级 - 创建/管理ASN到货通知'),
-            ('pur:receipt:execute', '执行采购收货', 'pur', '企业级 - 确认采购到货收货'),
-            ('pur:receipt:query', '查询采购收货', 'pur', '企业级 - 查询采购收货记录'),
-            ('pur:return:create', '创建采购退货', 'pur', '企业级 - 发起采购退货申请'),
-            ('pur:return:approve', '审批采购退货', 'pur', '企业级 - 审批采购退货申请'),
-            ('pur:return:query', '查询采购退货', 'pur', '企业级 - 查询采购退货记录'),
-            ('pur:settlement:execute', '执行采购结算', 'pur', '企业级 - 执行采购对账与结算'),
-            ('pur:invoice:manage', '发票管理', 'pur', '企业级 - 管理采购发票与匹配'),
-            ('pur:payment:request', '付款申请', 'pur', '企业级 - 发起付款申请'),
-            ('pur:payment:confirm', '付款确认', 'pur', '企业级 - 确认付款完成'),
-            ('pur:reconcile:execute', '采购对账', 'pur', '企业级 - 执行采购WMS INV三边对账')
-        ON CONFLICT (permission_code) DO NOTHING
+            (gen_random_uuid(), 'pur:supplier:manage', '供应商管理', 'pur', '企业级 - 管理供应商档案/供货范围'),
+            (gen_random_uuid(), 'pur:supplier:query', '查询供应商', 'pur', '企业级 - 查询供应商列表与详情'),
+            (gen_random_uuid(), 'pur:quotation:manage', '报价单管理', 'pur', '企业级 - 管理供应商报价单'),
+            (gen_random_uuid(), 'pur:evaluation:manage', '供应商评估', 'pur', '企业级 - 供应商绩效评估'),
+            (gen_random_uuid(), 'pur:request:create', '创建采购申请', 'pur', '企业级 - 发起采购申请'),
+            (gen_random_uuid(), 'pur:request:approve', '审批采购申请', 'pur', '企业级 - 审批采购申请'),
+            (gen_random_uuid(), 'pur:request:query', '查询采购申请', 'pur', '企业级 - 查询采购申请列表'),
+            (gen_random_uuid(), 'pur:order:create', '创建采购订单', 'pur', '企业级 - 创建采购订单'),
+            (gen_random_uuid(), 'pur:order:approve', '审批采购订单', 'pur', '企业级 - 审批采购订单'),
+            (gen_random_uuid(), 'pur:order:send', '发送采购订单', 'pur', '企业级 - 发送采购订单给供应商'),
+            (gen_random_uuid(), 'pur:order:change', '变更采购订单', 'pur', '企业级 - 变更已审批采购订单'),
+            (gen_random_uuid(), 'pur:order:cancel', '取消采购订单', 'pur', '企业级 - 取消采购订单'),
+            (gen_random_uuid(), 'pur:order:close', '关闭采购订单', 'pur', '企业级 - 关闭已完成的采购订单'),
+            (gen_random_uuid(), 'pur:order:query', '查询采购订单', 'pur', '企业级 - 查询采购订单列表与详情'),
+            (gen_random_uuid(), 'pur:asn:manage', '管理到货通知', 'pur', '企业级 - 创建/管理ASN到货通知'),
+            (gen_random_uuid(), 'pur:receipt:execute', '执行采购收货', 'pur', '企业级 - 确认采购到货收货'),
+            (gen_random_uuid(), 'pur:receipt:query', '查询采购收货', 'pur', '企业级 - 查询采购收货记录'),
+            (gen_random_uuid(), 'pur:return:create', '创建采购退货', 'pur', '企业级 - 发起采购退货申请'),
+            (gen_random_uuid(), 'pur:return:approve', '审批采购退货', 'pur', '企业级 - 审批采购退货申请'),
+            (gen_random_uuid(), 'pur:return:query', '查询采购退货', 'pur', '企业级 - 查询采购退货记录'),
+            (gen_random_uuid(), 'pur:settlement:execute', '执行采购结算', 'pur', '企业级 - 执行采购对账与结算'),
+            (gen_random_uuid(), 'pur:invoice:manage', '发票管理', 'pur', '企业级 - 管理采购发票与匹配'),
+            (gen_random_uuid(), 'pur:payment:request', '付款申请', 'pur', '企业级 - 发起付款申请'),
+            (gen_random_uuid(), 'pur:payment:confirm', '付款确认', 'pur', '企业级 - 确认付款完成'),
+            (gen_random_uuid(), 'pur:reconcile:execute', '采购对账', 'pur', '企业级 - 执行采购WMS INV三边对账')
+        ON CONFLICT (code) DO NOTHING
     """)
 
 
