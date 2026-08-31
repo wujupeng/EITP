@@ -19,6 +19,11 @@ _CACHE_TTL = 60.0
 FEATURE_PATH_MAP: dict[str, str] = {
     "/api/v1/tenant/hierarchy": "hierarchy",
     "/api/v1/tenant/config": "config",
+    "/api/v1/inv/": "inventory",
+    "/api/v1/group/": "mdm_group_catalog",
+    "/api/v1/tenant/mdm/enterprise-products": "mdm_enterprise_product",
+    "/api/v1/tenant/mdm/governance": "mdm_governance",
+    "/api/v1/tenant/mdm/negative-policy": "mdm_negative_policy",
 }
 
 

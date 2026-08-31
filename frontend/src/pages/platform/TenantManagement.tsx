@@ -92,6 +92,11 @@ export default function TenantManagement() {
     { title: '版本', dataIndex: 'version', key: 'version' },
     { title: '操作', key: 'action', render: (_, record) => (
       <Space>
+        {record.status === 'provisioning' && (
+          <Popconfirm title="确认完成开通？" onConfirm={() => handleStatusTransition(record.id, 'provision')}>
+            <Button size="small" type="primary">完成开通</Button>
+          </Popconfirm>
+        )}
         {record.status === 'active' && (
           <Button size="small" onClick={() => handleStatusTransition(record.id, 'disable')}>停用</Button>
         )}

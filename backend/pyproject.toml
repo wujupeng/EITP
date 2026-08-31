@@ -15,6 +15,10 @@ dependencies = [
     "structlog>=24.4.0",
     "redis>=5.1.0",
     "httpx>=0.27.0",
+    "pyjwt[crypto]>=2.9.0",
+    "argon2-cffi>=23.1.0",
+    "bcrypt>=4.2.0",
+    "prometheus-client>=0.21.0",
 ]
 
 [project.optional-dependencies]
@@ -42,3 +46,6 @@ plugins = ["pydantic.mypy"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*", "*Test"]
+python_functions = ["test_*"]

@@ -1,0 +1,1 @@
+SELECT rolname FROM pg_roles WHERE rolname LIKE '%app%' OR rolname LIKE '%eitp%' ORDER BY rolname;

@@ -34,6 +34,16 @@ class TenantContext:
 
     @classmethod
     def current(cls) -> TenantContext | None:
+        from app.interfaces.middleware.security_context import SecurityContext
+        sc = SecurityContext.current()
+        if sc is not None:
+            return TenantContext(
+                tenant_id=sc.tenant.tenant_id,
+                user_id=sc.user.user_id,
+                data_scope=sc.data_scope.scope_type,
+                is_platform_admin=sc.user.is_platform_admin,
+                tenant_status=sc.tenant.tenant_status,
+            )
         return _tenant_context.get()
 
     @classmethod
@@ -78,12 +88,14 @@ class TenantContextMiddleware(BaseHTTPMiddleware):
 
     SKIP_PATHS = {
         "/health", "/health/live", "/health/ready",
-        "/docs", "/openapi.json",
+        "/docs", "/openapi.json", "/metrics",
     }
+    SKIP_PREFIXES = ("/api/v1/auth/", "/api/v1/admin/")
     PLATFORM_PATHS = {"/api/v1/platform/"}
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[no-untyped-def]
-        if request.url.path in self.SKIP_PATHS:
+        path = request.url.path
+        if path in self.SKIP_PATHS or path.startswith(self.SKIP_PREFIXES):
             return await call_next(request)
 
         token = request.headers.get("X-Tenant-Token")

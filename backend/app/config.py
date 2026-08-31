@@ -40,6 +40,15 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO")
     log_json: bool = Field(default=True)
 
+    wms_putaway_strategy: str = Field(default="same_product_concentrate", description="上架策略")
+    wms_picking_strategy: str = Field(default="fifo", description="拣货策略")
+    wms_receiving_over_receive_ratio: float = Field(default=0.0, ge=0.0, description="收货超收比例（0=禁止超收）")
+    wms_transfer_require_approval: bool = Field(default=True, description="移库是否需要审批")
+    wms_reconcile_interval_seconds: int = Field(default=3600, ge=60, description="对账间隔（秒）")
+    wms_task_auto_assign: bool = Field(default=False, description="Task 自动分配")
+    wms_task_timeout_seconds: int = Field(default=7200, ge=60, description="Task 超时阈值（秒）")
+    wms_batch_lot_enabled: bool = Field(default=False, description="批次/LOT 是否启用（P1）")
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

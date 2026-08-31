@@ -94,7 +94,9 @@ async def transition_status(
     """租户状态流转。"""
     svc = TenantAppSvc(session)
 
-    if req.action == "disable":
+    if req.action == "provision":
+        tenant = await svc.complete_provision(tenant_id)
+    elif req.action == "disable":
         tenant = await svc.disable(tenant_id)
     elif req.action == "enable":
         tenant = await svc.enable(tenant_id)

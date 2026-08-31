@@ -25,5 +25,5 @@ class TenantResponse(BaseModel):
 
 
 class StatusTransitionRequest(BaseModel):
-    action: str = Field(..., description="动作: disable/enable/deprovision")
+    action: str = Field(..., description="动作: provision/disable/enable/deprovision")
     confirm_token: str | None = Field(default=None, description="注销确认令牌")
