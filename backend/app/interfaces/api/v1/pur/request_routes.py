@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Body, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.purchasing.pur_app_services import PurchaseRequestAppSvc
@@ -133,6 +133,7 @@ async def approve_request(
 @require_permission("pur:request:create")
 async def convert_request(
     request_id: UUID,
+    body: dict = Body(default={}),
     session: AsyncSession = Depends(get_db_session),
 ) -> dict:
     tenant_id = _get_tenant_id()
@@ -147,8 +148,13 @@ async def convert_request(
     order_svc = PurchaseOrderAppSvc(session)
     lines = await svc._repo.list_lines(session, tenant_id, request_id)
     order_code = f"PO-{orm.request_code}"
+    supplier_id = body.get("supplier_id")
+    if supplier_id is None and lines:
+        supplier_id = str(getattr(lines[0], "supplier_id", None) or "")
+    if not supplier_id:
+        return {"error": "supplier_id_required"}
     order_orm = await order_svc.create_order(
-        tenant_id, order_code, orm.supplier_id if hasattr(orm, 'supplier_id') else None,
+        tenant_id, order_code, supplier_id,
         lines=[{"sku_id": str(l.sku_id), "ordered_quantity": float(l.quantity),
                 "unit_price": float(l.unit_price) if l.unit_price else 0}
                for l in lines],

@@ -56,9 +56,17 @@ async def test_pur_cross_tenant_order_isolation(api_client):
     client, headers = api_client
     tenant_b_token = str(uuid4())
 
+    resp_sup = await client.post(
+        "/pur/suppliers",
+        json={"supplier_code": f"SUP-O-{uuid4().hex[:6]}", "supplier_name": "订单隔离供应商"},
+        headers={**headers, "X-Tenant-Token": TENANT_TOKEN},
+    )
+    assert resp_sup.status_code in (200, 201)
+    supplier_id = resp_sup.json()["supplier_id"]
+
     resp_a = await client.post(
         "/pur/orders",
-        json={"order_code": f"PO-A-{uuid4().hex[:6]}", "supplier_id": str(uuid4()), "lines": []},
+        json={"order_code": f"PO-A-{uuid4().hex[:6]}", "supplier_id": supplier_id, "lines": []},
         headers={**headers, "X-Tenant-Token": TENANT_TOKEN},
     )
     assert resp_a.status_code in (200, 201)

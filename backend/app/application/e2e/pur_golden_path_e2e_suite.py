@@ -167,7 +167,9 @@ class PurGoldenPathE2ETestSuite:
         s = time.perf_counter()
         try:
             rid = self._ctx["request_id"]
-            resp = await client.post(f"/pur/requests/{rid}/convert", headers=self._headers())
+            resp = await client.post(f"/pur/requests/{rid}/convert",
+                json={"supplier_id": self._ctx["supplier_id"]},
+                headers=self._headers())
             self._ctx["order_id"] = resp.json().get("order_id")
             self._record(6, "采购申请转单", s, bool(self._ctx.get("order_id")))
         except Exception as e:
