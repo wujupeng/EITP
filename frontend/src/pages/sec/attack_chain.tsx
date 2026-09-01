@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Card, Button, Table, Tag, Steps, Space, message } from 'antd'
+import { Card, Button, Steps, Space, message } from 'antd'
 import { secApi } from '@/api/sec'
 
 export default function SecAttackChainPage() {

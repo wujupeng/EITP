@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Descriptions, Table, Tag, Collapse, Space } from 'antd'
+import { Card, Descriptions, Table, Tag, Space } from 'antd'
 import { secApi } from '@/api/sec'
 import { useParams } from 'react-router-dom'
 

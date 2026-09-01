@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Button, Select, Progress, Table, Tag, Space, message } from 'antd'
+import { Card, Button, Select, Progress, Tag, Space, message } from 'antd'
 import { secApi } from '@/api/sec'
 import { useSecStore } from '@/store/sec'
 
