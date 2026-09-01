@@ -15,6 +15,7 @@ from app.interfaces.api.v1.master_data import router as master_data_router
 from app.interfaces.api.v1.mdm import mdm_router
 from app.interfaces.api.v1.placement import router as placement_router
 from app.interfaces.api.v1.pur import pur_router
+from app.interfaces.api.v1.sal import sal_router
 from app.interfaces.api.v1.tenant import router as tenant_router
 from app.interfaces.api.v1.wms import wms_router
 
@@ -31,4 +32,5 @@ api_router.include_router(inv_router)
 api_router.include_router(mdm_router)
 api_router.include_router(wms_router)
 api_router.include_router(pur_router)
+api_router.include_router(sal_router)
 api_router.include_router(e2e_router)

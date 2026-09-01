@@ -342,3 +342,102 @@ PUR_MENU_TREE: dict = {
         },
     ],
 }
+
+
+SAL_PERMISSIONS: list[dict[str, str]] = [
+    {"code": "sal:customer:manage", "name": "客户管理", "module": "sal", "description": "企业级 - 管理客户档案/地址/联系人"},
+    {"code": "sal:customer:query", "name": "查询客户", "module": "sal", "description": "企业级 - 查询客户列表与详情"},
+    {"code": "sal:category:manage", "name": "客户分类管理", "module": "sal", "description": "企业级 - 管理客户分类"},
+    {"code": "sal:credit:manage", "name": "信用额度管理", "module": "sal", "description": "企业级 - 管理客户信用额度"},
+    {"code": "sal:pricing:manage", "name": "价格体系管理", "module": "sal", "description": "企业级 - 管理客户价格体系"},
+    {"code": "sal:quotation:create", "name": "创建销售报价", "module": "sal", "description": "企业级 - 创建销售报价单"},
+    {"code": "sal:quotation:approve", "name": "审批销售报价", "module": "sal", "description": "企业级 - 审批销售报价单"},
+    {"code": "sal:quotation:convert", "name": "报价转订单", "module": "sal", "description": "企业级 - 报价单转销售订单"},
+    {"code": "sal:quotation:query", "name": "查询销售报价", "module": "sal", "description": "企业级 - 查询销售报价单"},
+    {"code": "sal:order:create", "name": "创建销售订单", "module": "sal", "description": "企业级 - 创建销售订单"},
+    {"code": "sal:order:approve", "name": "审批销售订单", "module": "sal", "description": "企业级 - 审批销售订单"},
+    {"code": "sal:order:confirm", "name": "确认销售订单", "module": "sal", "description": "企业级 - 确认销售订单(触发预留)"},
+    {"code": "sal:order:change", "name": "变更销售订单", "module": "sal", "description": "企业级 - 变更已审批销售订单"},
+    {"code": "sal:order:cancel", "name": "取消销售订单", "module": "sal", "description": "企业级 - 取消销售订单"},
+    {"code": "sal:order:close", "name": "关闭销售订单", "module": "sal", "description": "企业级 - 关闭已完成的销售订单"},
+    {"code": "sal:order:query", "name": "查询销售订单", "module": "sal", "description": "企业级 - 查询销售订单列表与详情"},
+    {"code": "sal:shipment:create", "name": "创建发货单", "module": "sal", "description": "企业级 - 创建发货单(部分发货)"},
+    {"code": "sal:shipment:confirm", "name": "确认发货", "module": "sal", "description": "企业级 - 确认发货(触发WMS Shipping)"},
+    {"code": "sal:shipment:query", "name": "查询发货", "module": "sal", "description": "企业级 - 查询发货记录"},
+    {"code": "sal:packing:manage", "name": "包装管理", "module": "sal", "description": "企业级 - 管理包装作业"},
+    {"code": "sal:return:create", "name": "创建销售退货", "module": "sal", "description": "企业级 - 发起销售退货申请"},
+    {"code": "sal:return:approve", "name": "审批销售退货", "module": "sal", "description": "企业级 - 审批销售退货申请"},
+    {"code": "sal:return:execute", "name": "执行销售退货", "module": "sal", "description": "企业级 - 执行退货收货与入库"},
+    {"code": "sal:return:query", "name": "查询销售退货", "module": "sal", "description": "企业级 - 查询销售退货记录"},
+    {"code": "sal:settlement:execute", "name": "执行销售结算", "module": "sal", "description": "企业级 - 执行销售对账与结算"},
+    {"code": "sal:invoice:create", "name": "开具销售发票", "module": "sal", "description": "企业级 - 开具销售发票"},
+    {"code": "sal:payment:request", "name": "收款申请", "module": "sal", "description": "企业级 - 发起收款申请"},
+    {"code": "sal:payment:confirm", "name": "收款确认", "module": "sal", "description": "企业级 - 确认收款完成"},
+    {"code": "sal:reconcile:execute", "name": "销售对账", "module": "sal", "description": "企业级 - 执行销售WMS INV三边对账"},
+]
+
+
+ENTERPRISE_LEVEL_SAL_PERMISSIONS: frozenset[str] = frozenset(
+    p["code"] for p in SAL_PERMISSIONS if p["description"].startswith("企业级")
+)
+
+
+SAL_MENU_TREE: dict = {
+    "tenant_level": [
+        {
+            "key": "sal-customer",
+            "label": "客户管理",
+            "permission": "sal:customer:manage",
+            "feature_flag": "sal_customer",
+            "children": [
+                {"key": "sal-customer-list", "label": "客户档案", "permission": "sal:customer:manage"},
+                {"key": "sal-category", "label": "客户分类", "permission": "sal:category:manage"},
+                {"key": "sal-credit", "label": "信用额度", "permission": "sal:credit:manage"},
+                {"key": "sal-pricing", "label": "价格体系", "permission": "sal:pricing:manage"},
+            ],
+        },
+        {
+            "key": "sal-quotation",
+            "label": "销售报价",
+            "permission": "sal:quotation:create",
+            "feature_flag": "sal_quotation",
+        },
+        {
+            "key": "sal-order",
+            "label": "销售订单",
+            "permission": "sal:order:create",
+            "feature_flag": "sal_order",
+        },
+        {
+            "key": "sal-shipment",
+            "label": "发货管理",
+            "permission": "sal:shipment:create",
+            "feature_flag": "sal_shipment",
+            "children": [
+                {"key": "sal-packing", "label": "包装管理", "permission": "sal:packing:manage"},
+            ],
+        },
+        {
+            "key": "sal-return",
+            "label": "销售退货",
+            "permission": "sal:return:create",
+            "feature_flag": "sal_return",
+        },
+        {
+            "key": "sal-settlement",
+            "label": "销售结算",
+            "permission": "sal:settlement:execute",
+            "feature_flag": "sal_settlement",
+            "children": [
+                {"key": "sal-invoice", "label": "发票管理", "permission": "sal:invoice:create"},
+                {"key": "sal-payment", "label": "收款管理", "permission": "sal:payment:request"},
+            ],
+        },
+        {
+            "key": "sal-reconcile",
+            "label": "销售对账",
+            "permission": "sal:reconcile:execute",
+            "feature_flag": "sal_reconcile",
+        },
+    ],
+}

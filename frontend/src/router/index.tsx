@@ -44,6 +44,20 @@ import PurSettlementManagementPage from '@/pages/pur/PurSettlementManagementPage
 import PurInvoiceManagementPage from '@/pages/pur/PurInvoiceManagementPage'
 import PurPaymentManagementPage from '@/pages/pur/PurPaymentManagementPage'
 import PurReconcileManagementPage from '@/pages/pur/PurReconcileManagementPage'
+import SalCustomerManagementPage from '@/pages/sal/SalCustomerManagementPage'
+import SalCustomerCategoryPage from '@/pages/sal/SalCustomerCategoryPage'
+import SalCreditLimitPage from '@/pages/sal/SalCreditLimitPage'
+import SalCustomerPricingPage from '@/pages/sal/SalCustomerPricingPage'
+import SalQuotationManagementPage from '@/pages/sal/SalQuotationManagementPage'
+import SalOrderManagementPage from '@/pages/sal/SalOrderManagementPage'
+import SalOrderDetailPage from '@/pages/sal/SalOrderDetailPage'
+import SalShipmentManagementPage from '@/pages/sal/SalShipmentManagementPage'
+import SalPackingManagementPage from '@/pages/sal/SalPackingManagementPage'
+import SalReturnManagementPage from '@/pages/sal/SalReturnManagementPage'
+import SalSettlementManagementPage from '@/pages/sal/SalSettlementManagementPage'
+import SalInvoiceManagementPage from '@/pages/sal/SalInvoiceManagementPage'
+import SalPaymentManagementPage from '@/pages/sal/SalPaymentManagementPage'
+import SalReconcileManagementPage from '@/pages/sal/SalReconcileManagementPage'
 import { useAuthStore } from '@/store/auth'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -111,6 +125,20 @@ const routes: RouteObject[] = [
       { path: 'pur/invoices', element: <PurInvoiceManagementPage /> },
       { path: 'pur/payments', element: <PurPaymentManagementPage /> },
       { path: 'pur/reconcile', element: <PurReconcileManagementPage /> },
+      { path: 'sal/customers', element: <SalCustomerManagementPage /> },
+      { path: 'sal/customer-categories', element: <SalCustomerCategoryPage /> },
+      { path: 'sal/credit-limits', element: <SalCreditLimitPage /> },
+      { path: 'sal/customer-pricing', element: <SalCustomerPricingPage /> },
+      { path: 'sal/quotations', element: <SalQuotationManagementPage /> },
+      { path: 'sal/orders', element: <SalOrderManagementPage /> },
+      { path: 'sal/orders/:id', element: <SalOrderDetailPage /> },
+      { path: 'sal/shipments', element: <SalShipmentManagementPage /> },
+      { path: 'sal/packing', element: <SalPackingManagementPage /> },
+      { path: 'sal/returns', element: <SalReturnManagementPage /> },
+      { path: 'sal/settlements', element: <SalSettlementManagementPage /> },
+      { path: 'sal/invoices', element: <SalInvoiceManagementPage /> },
+      { path: 'sal/payments', element: <SalPaymentManagementPage /> },
+      { path: 'sal/reconcile', element: <SalReconcileManagementPage /> },
     ],
   },
 ]
