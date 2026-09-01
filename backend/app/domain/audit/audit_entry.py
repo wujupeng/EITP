@@ -57,6 +57,23 @@ class AuditAction(Enum):
     WMS_POSITION_SYNCED = "wms_position_synced"
     WMS_RECONCILE_DIFF_FOUND = "wms_reconcile_diff_found"
 
+    CERT_EXECUTE = "cert_execute"
+    ITEM_PASS = "item_pass"
+    ITEM_FAIL = "item_fail"
+    ITEM_UNEXECUTABLE = "item_unexecutable"
+    CERT_ISSUE = "cert_issue"
+    CERT_REVOKE = "cert_revoke"
+    CERT_CONFIG_CHANGE = "cert_config_change"
+    AUDIT_TAMPER_ATTEMPT = "audit_tamper_attempt"
+    PLATFORM_ADMIN_ACCESS_REQUEST = "platform_admin_access_request"
+    PLATFORM_ADMIN_BUSINESS_ACCESS = "platform_admin_business_access"
+    PLATFORM_ADMIN_BUSINESS_WRITE_DENIED = "platform_admin_business_write_denied"
+    REDIS_KEY_VIOLATION = "redis_key_violation"
+    CROSS_TENANT_ACCESS_BLOCKED = "cross_tenant_access_blocked"
+    CROSS_TENANT_REF_BLOCKED = "cross_tenant_ref_blocked"
+    JOIN_CROSS_TENANT_LEAK = "join_cross_tenant_leak"
+    E2E_ATTACK_CHAIN_EXECUTE = "e2e_attack_chain_execute"
+
 
 @dataclass(frozen=True)
 class AuditEntry:

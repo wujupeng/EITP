@@ -441,3 +441,101 @@ SAL_MENU_TREE: dict = {
         },
     ],
 }
+
+
+SEC_PERMISSIONS: list[dict[str, str]] = [
+    {"code": "sec:cert:execute", "name": "执行认证", "module": "sec", "description": "平台级 - 执行多租户隔离认证矩阵"},
+    {"code": "sec:cert:issue", "name": "颁发证书", "module": "sec", "description": "平台级 - 颁发 Multi-Tenant Isolation Certification"},
+    {"code": "sec:cert:revoke", "name": "撤销证书", "module": "sec", "description": "平台级 - 撤销已颁发的认证证书"},
+    {"code": "sec:cert:verify", "name": "验证证书", "module": "sec", "description": "平台级 - 验证认证证书签名与有效性"},
+    {"code": "sec:report:view", "name": "查看认证报告", "module": "sec", "description": "平台级 - 查看认证报告与证据"},
+    {"code": "sec:report:export", "name": "导出认证报告", "module": "sec", "description": "平台级 - 导出认证报告 JSON/HTML/PDF"},
+    {"code": "sec:report:evidence:view", "name": "查看证据", "module": "sec", "description": "平台级 - 下钻查看认证项证据快照"},
+    {"code": "sec:config:manage", "name": "管理认证配置", "module": "sec", "description": "平台级 - 配置认证矩阵层级与阈值"},
+    {"code": "sec:config:item:skip", "name": "跳过认证项", "module": "sec", "description": "平台级 - 跳过特定认证项（需显式原因）"},
+    {"code": "sec:audit:view", "name": "查看认证审计", "module": "sec", "description": "平台级 - 查看认证审计日志"},
+    {"code": "sec:audit:export", "name": "导出认证审计", "module": "sec", "description": "平台级 - 导出认证审计日志"},
+    {"code": "sec:platform:access:request", "name": "申请平台访问", "module": "sec", "description": "平台级 - 申请平台管理员业务数据访问"},
+    {"code": "sec:platform:access:approve", "name": "审批平台访问", "module": "sec", "description": "平台级 - 审批平台管理员业务数据访问申请"},
+    {"code": "sec:redis:scan", "name": "Redis Key 扫描", "module": "sec", "description": "平台级 - 扫描 Redis Key 租户前缀合规性"},
+    {"code": "sec:join:test", "name": "JOIN 泄露测试", "module": "sec", "description": "平台级 - 执行 JOIN 跨租户泄露测试"},
+    {"code": "sec:attack:chain", "name": "攻击链 E2E", "module": "sec", "description": "平台级 - 执行 14 步完整攻击链 E2E 验证"},
+    {"code": "sec:matrix:execute", "name": "执行认证矩阵", "module": "sec", "description": "平台级 - 执行 15 层 × 7 模块 × 9 操作全矩阵"},
+    {"code": "sec:evidence:capture", "name": "采集证据", "module": "sec", "description": "平台级 - 采集认证项证据快照"},
+    {"code": "sec:certificate:sign", "name": "签署证书", "module": "sec", "description": "平台级 - HMAC-SHA256 签署认证证书"},
+    {"code": "sec:tenant:isolate", "name": "租户隔离验证", "module": "sec", "description": "平台级 - 验证租户数据隔离完整性"},
+]
+
+
+ENTERPRISE_LEVEL_SEC_PERMISSIONS: frozenset[str] = frozenset(
+    p["code"] for p in SEC_PERMISSIONS if p["description"].startswith("企业级")
+)
+
+
+SEC_MENU_TREE: dict = {
+    "platform_level": [
+        {
+            "key": "sec-cert",
+            "label": "安全认证",
+            "permission": "sec:cert:execute",
+            "feature_flag": "sec_certification",
+            "children": [
+                {"key": "sec-cert-execute", "label": "认证执行", "permission": "sec:cert:execute"},
+                {"key": "sec-cert-matrix", "label": "认证矩阵", "permission": "sec:matrix:execute"},
+                {"key": "sec-cert-attack-chain", "label": "攻击链 E2E", "permission": "sec:attack:chain"},
+            ],
+        },
+        {
+            "key": "sec-report",
+            "label": "认证报告",
+            "permission": "sec:report:view",
+            "feature_flag": "sec_report",
+            "children": [
+                {"key": "sec-report-list", "label": "报告列表", "permission": "sec:report:view"},
+                {"key": "sec-report-export", "label": "导出报告", "permission": "sec:report:export"},
+                {"key": "sec-report-evidence", "label": "证据下钻", "permission": "sec:report:evidence:view"},
+            ],
+        },
+        {
+            "key": "sec-certificate",
+            "label": "认证证书",
+            "permission": "sec:cert:verify",
+            "feature_flag": "sec_certificate",
+            "children": [
+                {"key": "sec-certificate-list", "label": "证书列表", "permission": "sec:cert:verify"},
+                {"key": "sec-certificate-issue", "label": "颁发证书", "permission": "sec:cert:issue"},
+                {"key": "sec-certificate-revoke", "label": "撤销证书", "permission": "sec:cert:revoke"},
+            ],
+        },
+        {
+            "key": "sec-config",
+            "label": "认证配置",
+            "permission": "sec:config:manage",
+            "feature_flag": "sec_config",
+        },
+        {
+            "key": "sec-audit",
+            "label": "认证审计",
+            "permission": "sec:audit:view",
+            "feature_flag": "sec_audit",
+        },
+        {
+            "key": "sec-platform-access",
+            "label": "平台访问申请",
+            "permission": "sec:platform:access:request",
+            "feature_flag": "sec_platform_access",
+        },
+        {
+            "key": "sec-redis-scan",
+            "label": "Redis Key 扫描",
+            "permission": "sec:redis:scan",
+            "feature_flag": "sec_redis_scan",
+        },
+        {
+            "key": "sec-join-test",
+            "label": "JOIN 泄露测试",
+            "permission": "sec:join:test",
+            "feature_flag": "sec_join_test",
+        },
+    ],
+}
