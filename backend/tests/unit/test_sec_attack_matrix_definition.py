@@ -110,28 +110,19 @@ class AttackMatrixDefinitionTest:
             assert iid.startswith("SEC-ITEM-E2E-step-")
 
     def test_get_items_by_layer_returns_layer_items(self, matrix: AttackMatrixDefinition) -> None:
-        # get_items_by_layer 用子串匹配 "-{layer}-"，对与操作同名的层 (join/aggregate/audit/export)
-        # 会跨层匹配同名操作项。此处验证方法返回与显式过滤逻辑一致，且每项均含层标识。
+        # get_items_by_layer 用精确前缀匹配 "SEC-ITEM-{layer}-"，不跨层匹配同名操作项。
         for layer in IsolationLayer:
             items = matrix.get_items_by_layer(layer)
-            expected = [
-                iid for iid in matrix.generate_item_ids()
-                if f"-{layer.value}-" in iid or iid.startswith(f"SEC-ITEM-{layer.value}-")
-            ]
+            prefix = f"SEC-ITEM-{layer.value}-"
+            expected = [iid for iid in matrix.generate_item_ids() if iid.startswith(prefix)]
             assert items == expected, f"layer {layer.value} filter logic mismatch"
             assert len(items) > 0
             for iid in items:
-                assert f"-{layer.value}-" in iid or iid.startswith(f"SEC-ITEM-{layer.value}-"), iid
+                assert iid.startswith(prefix), iid
 
-    def test_get_items_by_layer_non_conflict_layer_is_496(self, matrix: AttackMatrixDefinition) -> None:
-        # 非冲突层 (层名不是操作名): 1 个 E2E-attack_chain + 9*55 矩阵项 = 496
-        non_conflict_layers = {
-            IsolationLayer.JWT, IsolationLayer.TENANT_TOKEN, IsolationLayer.TENANT_CONTEXT,
-            IsolationLayer.DATA_SCOPE, IsolationLayer.API, IsolationLayer.APPLICATION,
-            IsolationLayer.REPOSITORY, IsolationLayer.RLS, IsolationLayer.CACHE,
-            IsolationLayer.ASYNC_JOB, IsolationLayer.E2E,
-        }
-        for layer in non_conflict_layers:
+    def test_get_items_by_layer_all_layers_return_496(self, matrix: AttackMatrixDefinition) -> None:
+        # 精确前缀匹配后，所有层均返回 1 个 E2E-attack_chain + 9*55 矩阵项 = 496
+        for layer in IsolationLayer:
             assert len(matrix.get_items_by_layer(layer)) == 496, f"layer {layer.value}"
 
     def test_get_items_by_module_returns_module_items(self, matrix: AttackMatrixDefinition) -> None:
@@ -150,9 +141,11 @@ class AttackMatrixDefinitionTest:
         assert isinstance(matrix.matrix_id, UUID)
 
     def test_aggregate_roots_dict_per_instance(self) -> None:
-        # default_factory=lambda: _AGGREGATE_ROOTS.copy() 产出独立 dict (浅拷贝)，
-        # 两个实例的 aggregate_roots 是不同 dict 对象。
+        # default_factory=lambda: copy.deepcopy(_AGGREGATE_ROOTS) 产出独立 dict (深拷贝)，
+        # 两个实例的 aggregate_roots 是不同 dict 对象，且内部 list 也独立。
         m1 = AttackMatrixDefinition()
         m2 = AttackMatrixDefinition()
         assert m1.aggregate_roots is not m2.aggregate_roots
         assert m1.aggregate_roots == m2.aggregate_roots
+        m1.aggregate_roots["MT"].append("NewAggregate")
+        assert "NewAggregate" not in m2.aggregate_roots["MT"]

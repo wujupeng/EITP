@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  fault-injector:
+    image: eitp/fault-injector:latest
+    environment:
+      - ALLOWED_ENVS=STAGING,PRE_PROD
+      - REQUIRES_DUAL_AUTH=true
+    networks:
+      - prod-test
+    deploy:
+      placement:
+        constraints: [node.labels.env != production]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+  prod-test:
+    external: true

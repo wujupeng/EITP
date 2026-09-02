@@ -1,0 +1,47 @@
+{
+  "dashboard": {
+    "title": "EITP Platform Overview",
+    "panels": [
+      {
+        "title": "API QPS",
+        "type": "graph",
+        "targets": [{"expr": "sum(rate(eitp_plt_api_requests_total[1m])) by (module)"}]
+      },
+      {
+        "title": "P95 Latency",
+        "type": "graph",
+        "targets": [{"expr": "histogram_quantile(0.95, sum(rate(eitp_plt_request_duration_seconds_bucket[5m])) by (le, module))"}]
+      },
+      {
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [{"expr": "sum(rate(eitp_plt_errors_total[1m])) by (module)"}]
+      },
+      {
+        "title": "Outbox Pending",
+        "type": "stat",
+        "targets": [{"expr": "eitp_plt_outbox_pending"}]
+      },
+      {
+        "title": "Saga Running",
+        "type": "stat",
+        "targets": [{"expr": "eitp_plt_saga_running"}]
+      },
+      {
+        "title": "Active Tenants",
+        "type": "stat",
+        "targets": [{"expr": "eitp_plt_active_tenants"}]
+      },
+      {
+        "title": "Idempotency Hits",
+        "type": "graph",
+        "targets": [{"expr": "sum(rate(eitp_plt_idempotency_hits_total[1m])) by (tenant_id)"}]
+      },
+      {
+        "title": "Rate Limited",
+        "type": "graph",
+        "targets": [{"expr": "sum(rate(eitp_plt_rate_limited_total[1m])) by (api_path)"}]
+      }
+    ]
+  }
+}

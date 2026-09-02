@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass, field
 from typing import Any
 from uuid import UUID, uuid4
@@ -29,7 +30,7 @@ class AttackMatrixDefinition:
     matrix_version: str = "1.0"
     layers: list[IsolationLayer] = field(default_factory=lambda: list(IsolationLayer))
     operations: list[NineOperation] = field(default_factory=lambda: list(NineOperation))
-    aggregate_roots: dict[str, list[str]] = field(default_factory=lambda: _AGGREGATE_ROOTS.copy())
+    aggregate_roots: dict[str, list[str]] = field(default_factory=lambda: copy.deepcopy(_AGGREGATE_ROOTS))
     e2e_steps: int = 14
 
     @property
@@ -58,7 +59,8 @@ class AttackMatrixDefinition:
         return item_ids
 
     def get_items_by_layer(self, layer: IsolationLayer) -> list[str]:
-        return [iid for iid in self.generate_item_ids() if f"-{layer.value}-" in iid or iid.startswith(f"SEC-ITEM-{layer.value}-")]
+        prefix = f"SEC-ITEM-{layer.value}-"
+        return [iid for iid in self.generate_item_ids() if iid.startswith(prefix)]
 
     def get_items_by_module(self, module: str) -> list[str]:
         return [iid for iid in self.generate_item_ids() if f"-{module}:" in iid]

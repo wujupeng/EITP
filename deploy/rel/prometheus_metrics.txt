@@ -1,0 +1,6 @@
+rel_seal_gate_total{gate_type,result}
+rel_asset_snapshot_duration_seconds{asset_type}
+rel_seal_status{release_id}
+rel_core_freeze_verification_result
+rel_rollback_drill_status{rollback_id}
+rel_asset_snapshot_tamper_total{asset_type}

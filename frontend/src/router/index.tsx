@@ -59,6 +59,33 @@ import SalInvoiceManagementPage from '@/pages/sal/SalInvoiceManagementPage'
 import SalPaymentManagementPage from '@/pages/sal/SalPaymentManagementPage'
 import SalReconcileManagementPage from '@/pages/sal/SalReconcileManagementPage'
 import { useAuthStore } from '@/store/auth'
+import { lazy, Suspense } from 'react'
+
+const ProdDashboard = lazy(() => import('@/pages/prod/Dashboard'))
+const ProdExecute = lazy(() => import('@/pages/prod/verifications/Execute'))
+const ProdVerificationList = lazy(() => import('@/pages/prod/verifications/List'))
+const ProdVerificationDetail = lazy(() => import('@/pages/prod/verifications/Detail'))
+const ProdEvidenceDetail = lazy(() => import('@/pages/prod/evidence/Detail'))
+const ProdDossierList = lazy(() => import('@/pages/prod/dossiers/List'))
+const ProdDossierDetail = lazy(() => import('@/pages/prod/dossiers/Detail'))
+const ProdDossierSign = lazy(() => import('@/pages/prod/dossiers/Sign'))
+const ProdCoreFreeze = lazy(() => import('@/pages/prod/CoreFreeze'))
+
+const RelDashboard = lazy(() => import('@/pages/rel/Dashboard'))
+const RelSealList = lazy(() => import('@/pages/rel/seals/List'))
+const RelSealDetail = lazy(() => import('@/pages/rel/seals/Detail'))
+const RelSealRequest = lazy(() => import('@/pages/rel/seals/Request'))
+const RelSealCoSign = lazy(() => import('@/pages/rel/seals/CoSign'))
+const RelGateList = lazy(() => import('@/pages/rel/gates/List'))
+const RelSnapshotList = lazy(() => import('@/pages/rel/snapshots/List'))
+const RelSnapshotDetail = lazy(() => import('@/pages/rel/snapshots/Detail'))
+const RelDeclarationDetail = lazy(() => import('@/pages/rel/declarations/Detail'))
+const RelReportDetail = lazy(() => import('@/pages/rel/reports/Detail'))
+const RelRollbackList = lazy(() => import('@/pages/rel/rollback/List'))
+const RelRollbackDetail = lazy(() => import('@/pages/rel/rollback/Detail'))
+const RelRollbackDrill = lazy(() => import('@/pages/rel/rollback/Drill'))
+
+const Lazy = ({ children }: { children: React.ReactNode }) => <Suspense fallback={null}>{children}</Suspense>
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -139,6 +166,30 @@ const routes: RouteObject[] = [
       { path: 'sal/invoices', element: <SalInvoiceManagementPage /> },
       { path: 'sal/payments', element: <SalPaymentManagementPage /> },
       { path: 'sal/reconcile', element: <SalReconcileManagementPage /> },
+      { path: 'prod/dashboard', element: <Lazy><ProdDashboard /></Lazy> },
+      { path: 'prod/verifications/execute', element: <Lazy><ProdExecute /></Lazy> },
+      { path: 'prod/verifications', element: <Lazy><ProdVerificationList /></Lazy> },
+      { path: 'prod/verifications/:run_id', element: <Lazy><ProdVerificationDetail /></Lazy> },
+      { path: 'prod/evidence/:evidence_id', element: <Lazy><ProdEvidenceDetail /></Lazy> },
+      { path: 'prod/dossiers', element: <Lazy><ProdDossierList /></Lazy> },
+      { path: 'prod/dossiers/:dossier_id', element: <Lazy><ProdDossierDetail /></Lazy> },
+
+      { path: 'prod/dossiers/:dossier_id/sign', element: <Lazy><ProdDossierSign /></Lazy> },
+      { path: 'prod/core-freeze', element: <Lazy><ProdCoreFreeze /></Lazy> },
+
+      { path: 'rel/dashboard', element: <Lazy><RelDashboard /></Lazy> },
+      { path: 'rel/seals', element: <Lazy><RelSealList /></Lazy> },
+      { path: 'rel/seals/request', element: <Lazy><RelSealRequest /></Lazy> },
+      { path: 'rel/seals/:releaseId', element: <Lazy><RelSealDetail /></Lazy> },
+      { path: 'rel/seals/:releaseId/co-sign', element: <Lazy><RelSealCoSign /></Lazy> },
+      { path: 'rel/gates/:releaseId', element: <Lazy><RelGateList /></Lazy> },
+      { path: 'rel/snapshots/:releaseId', element: <Lazy><RelSnapshotList /></Lazy> },
+      { path: 'rel/snapshots/:releaseId/:snapshotId', element: <Lazy><RelSnapshotDetail /></Lazy> },
+      { path: 'rel/declarations/:releaseId', element: <Lazy><RelDeclarationDetail /></Lazy> },
+      { path: 'rel/reports/:releaseId', element: <Lazy><RelReportDetail /></Lazy> },
+      { path: 'rel/rollback', element: <Lazy><RelRollbackList /></Lazy> },
+      { path: 'rel/rollback/:releaseId', element: <Lazy><RelRollbackDetail /></Lazy> },
+      { path: 'rel/rollback/:releaseId/drill', element: <Lazy><RelRollbackDrill /></Lazy> },
     ],
   },
 ]
