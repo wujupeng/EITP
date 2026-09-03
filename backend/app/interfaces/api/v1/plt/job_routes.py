@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/plt/job", tags=["PLT-Job"])
+router = APIRouter(prefix="/plt/job", tags=["PLT-Job"])
 
 
 class JobCreateRequest(BaseModel):

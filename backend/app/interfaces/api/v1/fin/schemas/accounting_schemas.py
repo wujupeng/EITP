@@ -176,3 +176,10 @@ class PeriodCloseResponse(BaseModel):
 class FinancialReportResponse(BaseModel):
     report_type: str
     data: dict[str, Any]
+
+
+class GLVoucherListResponse(BaseModel):
+    items: list[GLVoucherResponse] = []
+    total: int = 0
+    offset: int = 0
+    limit: int = 100

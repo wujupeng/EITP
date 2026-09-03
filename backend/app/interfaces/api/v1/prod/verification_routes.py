@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/prod/verifications", tags=["PROD-Verification"])
+router = APIRouter(prefix="/prod/verifications", tags=["PROD-Verification"])
 
 
 class VerificationExecuteRequest(BaseModel):

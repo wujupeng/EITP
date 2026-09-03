@@ -23,6 +23,7 @@ from app.interfaces.api.v1.fin.schemas.accounting_schemas import (
     GLAccountResponse,
     GLRedVoucherRequest,
     GLVoucherCreateRequest,
+    GLVoucherListResponse,
     GLVoucherResponse,
     PeriodCloseRequest,
     PeriodCloseResponse,
@@ -127,6 +128,26 @@ async def list_gl_accounts(
         offset=query.offset,
     )
     return [GLAccountResponse(**item) for item in items]
+
+
+@router.get("/gl-vouchers")
+@require_permission("fin:accounting:gl-voucher-create")
+async def list_gl_vouchers(
+    period: str | None = Query(None),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    svc: AccountingService = Depends(get_accounting_service),
+) -> GLVoucherListResponse:
+    tenant_id = get_tenant_id()
+    items = await svc.list_gl_vouchers(
+        tenant_id, period=period, limit=limit, offset=offset
+    )
+    return GLVoucherListResponse(
+        items=[GLVoucherResponse(**item) for item in items],
+        total=len(items),
+        offset=offset,
+        limit=limit,
+    )
 
 
 @router.post("/gl-vouchers", status_code=status.HTTP_201_CREATED)

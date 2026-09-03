@@ -6,7 +6,7 @@ from fastapi import APIRouter, Response
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/plt/observability", tags=["PLT-Observability"])
+router = APIRouter(prefix="/plt/observability", tags=["PLT-Observability"])
 
 
 @router.get("/metrics")

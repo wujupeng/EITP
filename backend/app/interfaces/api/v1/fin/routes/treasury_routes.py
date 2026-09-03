@@ -19,10 +19,12 @@ from app.interfaces.api.v1.fin.schemas.treasury_schemas import (
     TreasuryAccountFreezeRequest,
     TreasuryAccountListQuery,
     TreasuryAccountResponse,
+    TreasuryBalanceSummaryResponse,
     TreasuryForecastQuery,
     TreasuryForecastResponse,
     TreasuryTransferApproveRequest,
     TreasuryTransferCreateRequest,
+    TreasuryTransferListResponse,
     TreasuryTransferResponse,
 )
 from app.interfaces.middleware.permission_interceptor import require_permission
@@ -108,6 +110,37 @@ async def get_account_balance(
         )
     balance = await svc.get_account_balance(account.tenant_id, account.account_no)
     return TreasuryAccountBalanceResponse(**balance)
+
+
+@router.get("/balance")
+@require_permission("fin:treasury:account-read")
+async def get_balance_summary(
+    currency: str | None = Query(None),
+    svc: TreasuryService = Depends(get_treasury_service),
+) -> TreasuryBalanceSummaryResponse:
+    tenant_id = get_tenant_id()
+    summary = await svc.get_balance_summary(tenant_id, currency=currency)
+    return TreasuryBalanceSummaryResponse(**summary)
+
+
+@router.get("/transfers")
+@require_permission("fin:treasury:transfer-request")
+async def list_treasury_transfers(
+    status: str | None = Query(None),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    svc: TreasuryService = Depends(get_treasury_service),
+) -> TreasuryTransferListResponse:
+    tenant_id = get_tenant_id()
+    items = await svc.list_treasury_transfers(
+        tenant_id, status=status, limit=limit, offset=offset
+    )
+    return TreasuryTransferListResponse(
+        items=[TreasuryTransferResponse(**item) for item in items],
+        total=len(items),
+        offset=offset,
+        limit=limit,
+    )
 
 
 @router.post("/transfers", status_code=status.HTTP_201_CREATED)

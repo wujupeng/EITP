@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/plt/config", tags=["PLT-Config"])
+router = APIRouter(prefix="/plt/config", tags=["PLT-Config"])
 
 
 class ConfigCreateRequest(BaseModel):

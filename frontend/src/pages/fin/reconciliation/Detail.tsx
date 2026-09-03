@@ -19,7 +19,7 @@ export default function ReconciliationDetailPage() {
   const handleDifference = async () => {
     try {
       const values = await form.validateFields()
-      await reconciliationApi.handleDifference(currentDiff.diff_id, values)
+      await reconciliationApi.handleDifference(id!, currentDiff.diff_id, values)
       message.success('差异处理成功')
       setModalOpen(false)
       const resp = await reconciliationApi.get(id!)

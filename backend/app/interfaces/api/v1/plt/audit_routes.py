@@ -15,7 +15,7 @@ from app.domain.platform.exceptions import PLTError
 
 logger = get_logger(__name__)
 
-router = APIRouter(prefix="/api/v1/plt/audit", tags=["PLT-Audit"])
+router = APIRouter(prefix="/plt/audit", tags=["PLT-Audit"])
 
 
 class AuditQueryRequest(BaseModel):

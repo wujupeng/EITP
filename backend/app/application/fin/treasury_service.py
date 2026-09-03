@@ -110,6 +110,56 @@ class TreasuryService:
             "available_balance": str(account.available_balance().amount),
         }
 
+    async def list_treasury_transfers(
+        self,
+        tenant_id: UUID,
+        status: str | None = None,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> list[dict[str, Any]]:
+        transfers = await self._transfer_repo.list_transfers(
+            tenant_id, status=status, limit=limit, offset=offset
+        )
+        return [
+            {
+                "transfer_id": str(t.transfer_id),
+                "transfer_no": t.transfer_no,
+                "from_account_id": str(t.from_account_id),
+                "to_account_id": str(t.to_account_id),
+                "transfer_amount": str(t.transfer_amount.amount),
+                "currency": t.transfer_amount.currency,
+                "reason": t.reason,
+                "status": t.status.value,
+                "approver_ids": list(t.approver_ids),
+                "created_at": t.created_at.isoformat() if t.created_at else None,
+                "updated_at": t.updated_at.isoformat() if t.updated_at else None,
+            }
+            for t in transfers
+        ]
+
+    async def get_balance_summary(
+        self,
+        tenant_id: UUID,
+        currency: str | None = None,
+    ) -> dict[str, Any]:
+        accounts = await self._account_repo.list_treasury_accounts(
+            tenant_id, currency=currency, limit=10000, offset=0
+        )
+        total_balance = Decimal("0")
+        total_frozen = Decimal("0")
+        total_available = Decimal("0")
+        for a in accounts:
+            total_balance += a.balance.amount
+            total_frozen += a.frozen_amount.amount
+            total_available += a.available_balance().amount
+        return {
+            "total_balance": str(total_balance),
+            "frozen_balance": str(total_frozen),
+            "available_balance": str(total_available),
+            "currency": currency or "CNY",
+            "account_count": len(accounts),
+        }
+
     async def request_treasury_transfer(
         self,
         tenant_id: UUID,

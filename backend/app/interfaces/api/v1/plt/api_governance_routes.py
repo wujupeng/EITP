@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/plt/api-governance", tags=["PLT-API-Governance"])
+router = APIRouter(prefix="/plt/api-governance", tags=["PLT-API-Governance"])
 
 
 class APIVersionContractRequest(BaseModel):

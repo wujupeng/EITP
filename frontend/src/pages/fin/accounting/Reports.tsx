@@ -13,7 +13,9 @@ export default function AccountingReportsPage() {
   const fetchData = async (params?: any) => {
     setLoading(true)
     try {
-      const res = await accountingApi.reports(params)
+      const reportType = params?.report_type || 'P&L'
+      const { report_type, ...rest } = params || {}
+      const res = await accountingApi.reports(reportType, rest)
       setReport(res.data)
     } catch {
       // handled by interceptor

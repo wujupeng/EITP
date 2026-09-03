@@ -8,7 +8,7 @@ from fastapi import APIRouter, Query
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/rel/reports", tags=["REL-Report"])
+router = APIRouter(prefix="/rel/reports", tags=["REL-Report"])
 
 
 @router.post("/{release_id}/assemble")

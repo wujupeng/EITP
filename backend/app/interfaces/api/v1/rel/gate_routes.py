@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/rel/gates", tags=["REL-Gate"])
+router = APIRouter(prefix="/rel/gates", tags=["REL-Gate"])
 
 
 class RetryGatesRequest(BaseModel):

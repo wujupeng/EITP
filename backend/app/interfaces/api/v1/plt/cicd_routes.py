@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/plt/cicd", tags=["PLT-CICD"])
+router = APIRouter(prefix="/plt/cicd", tags=["PLT-CICD"])
 
 
 class DeployRequest(BaseModel):

@@ -22,7 +22,7 @@ from app.interfaces.api.v1.mdm.negative_policy_routes import router as negative_
 from app.interfaces.api.v1.mdm.master_data_query_routes import router as master_data_query_router
 from app.interfaces.api.v1.mdm.master_data_audit_routes import router as master_data_audit_router
 
-mdm_router = APIRouter(prefix="/api/v1")
+mdm_router = APIRouter()
 mdm_router.include_router(group_product_router)
 mdm_router.include_router(group_category_brand_router)
 mdm_router.include_router(group_unit_router)

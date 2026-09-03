@@ -257,6 +257,37 @@ class AccountingService:
             for a in accounts
         ]
 
+    async def list_gl_vouchers(
+        self,
+        tenant_id: UUID,
+        period: str | None = None,
+        is_period_closed: bool | None = None,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> list[dict[str, Any]]:
+        vouchers = await self._gl_voucher_repo.list_gl_vouchers(
+            tenant_id,
+            period=period,
+            is_period_closed=is_period_closed,
+            limit=limit,
+            offset=offset,
+        )
+        return [
+            {
+                "voucher_id": str(v.gl_voucher_id),
+                "voucher_no": v.voucher_no,
+                "voucher_date": v.voucher_date.isoformat(),
+                "summary": v.summary,
+                "period": v.period,
+                "is_period_closed": v.is_period_closed,
+                "red_original_voucher_no": v.red_original_voucher_no,
+                "business_ref_type": v.business_ref_type,
+                "business_ref_id": v.business_ref_id,
+                "created_at": v.created_at.isoformat() if v.created_at else None,
+            }
+            for v in vouchers
+        ]
+
     async def create_gl_voucher(
         self,
         tenant_id: UUID,

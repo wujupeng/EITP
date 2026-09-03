@@ -98,3 +98,18 @@ class TreasuryForecastResponse(BaseModel):
     pending_outflow: str
     projected_available: str
     account_count: int
+
+
+class TreasuryTransferListResponse(BaseModel):
+    items: list[TreasuryTransferResponse] = []
+    total: int = 0
+    offset: int = 0
+    limit: int = 100
+
+
+class TreasuryBalanceSummaryResponse(BaseModel):
+    total_balance: str
+    frozen_balance: str
+    available_balance: str
+    currency: str
+    account_count: int

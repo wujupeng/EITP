@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from structlog import get_logger
 
 logger = get_logger(__name__)
-router = APIRouter(prefix="/api/v1/prod/dossiers", tags=["PROD-Dossier"])
+router = APIRouter(prefix="/prod/dossiers", tags=["PROD-Dossier"])
 
 
 class DossierAssembleRequest(BaseModel):

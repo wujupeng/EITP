@@ -3,7 +3,7 @@ import { client } from '../client'
 export const treasuryApi = {
   accounts: {
     list: (params?: any) => client.get('/fin/treasury/accounts', { params }),
-    get: (id: string) => client.get(`/fin/treasury/accounts/${id}`),
+    get: (id: string) => client.get(`/fin/treasury/accounts/${id}/balance`),
   },
   balance: (params?: any) => client.get('/fin/treasury/balance', { params }),
   transfers: {

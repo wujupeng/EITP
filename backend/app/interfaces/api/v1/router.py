@@ -20,6 +20,7 @@ from app.interfaces.api.v1.prod.router import prod_router
 from app.interfaces.api.v1.pur import pur_router
 from app.interfaces.api.v1.rel.router import rel_router
 from app.interfaces.api.v1.sal import sal_router
+from app.interfaces.api.v1.sec import sec_router
 from app.interfaces.api.v1.tenant import router as tenant_router
 from app.interfaces.api.v1.wms import wms_router
 
@@ -40,5 +41,6 @@ api_router.include_router(sal_router)
 api_router.include_router(plt_router)
 api_router.include_router(prod_router)
 api_router.include_router(rel_router)
+api_router.include_router(sec_router)
 api_router.include_router(e2e_router)
 api_router.include_router(fin_routes)
