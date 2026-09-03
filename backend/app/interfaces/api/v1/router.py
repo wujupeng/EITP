@@ -7,6 +7,7 @@ from fastapi import APIRouter
 from app.interfaces.api.v1.backup import router as backup_router
 from app.interfaces.api.v1.config import router as config_router
 from app.interfaces.api.v1.e2e_routes import router as e2e_router
+from app.interfaces.api.v1.fin.routes import fin_routes
 from app.interfaces.api.v1.group import router as group_router
 from app.interfaces.api.v1.hierarchy import router as hierarchy_router
 from app.interfaces.api.v1.iam import iam_router
@@ -40,3 +41,4 @@ api_router.include_router(plt_router)
 api_router.include_router(prod_router)
 api_router.include_router(rel_router)
 api_router.include_router(e2e_router)
+api_router.include_router(fin_routes)

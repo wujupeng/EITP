@@ -1,0 +1,1 @@
+"""FIN Pydantic v2 Schema 包。"""
