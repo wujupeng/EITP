@@ -1,1 +1,0 @@
-SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'iam_permission' ORDER BY ordinal_position;

@@ -131,4 +131,3 @@ async def list_enterprise_attribute_templates(
     ]
 
 
-router.include_router(enterprise_router)

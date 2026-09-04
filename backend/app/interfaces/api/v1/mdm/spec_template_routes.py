@@ -137,4 +137,3 @@ async def list_enterprise_spec_templates(
     ]
 
 
-router.include_router(enterprise_router)

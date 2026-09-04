@@ -1,6 +1,10 @@
 import { createBrowserRouter, type RouteObject, Navigate } from 'react-router-dom'
 import MainLayout from '@/layouts/MainLayout'
 import Login from '@/pages/auth/Login'
+import BizOpsFeatureSwitches from '@/pages/biz-ops/FeatureSwitches'
+import BizOpsStrategyManagement from '@/pages/biz-ops/StrategyManagement'
+import BizOpsAuditQuery from '@/pages/biz-ops/AuditQuery'
+import BizOpsOperationDashboard from '@/pages/biz-ops/OperationDashboard'
 import TenantManagement from '@/pages/platform/TenantManagement'
 import PlacementManagement from '@/pages/platform/PlacementManagement'
 import BackupManagement from '@/pages/platform/BackupManagement'
@@ -190,6 +194,11 @@ const routes: RouteObject[] = [
       { path: 'rel/rollback', element: <Lazy><RelRollbackList /></Lazy> },
       { path: 'rel/rollback/:releaseId', element: <Lazy><RelRollbackDetail /></Lazy> },
       { path: 'rel/rollback/:releaseId/drill', element: <Lazy><RelRollbackDrill /></Lazy> },
+
+      { path: 'biz-ops/dashboard', element: <BizOpsOperationDashboard /> },
+      { path: 'biz-ops/feature-switches', element: <BizOpsFeatureSwitches /> },
+      { path: 'biz-ops/strategies', element: <BizOpsStrategyManagement /> },
+      { path: 'biz-ops/audits', element: <BizOpsAuditQuery /> },
     ],
   },
 ]

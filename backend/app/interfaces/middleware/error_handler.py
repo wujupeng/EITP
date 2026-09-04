@@ -692,7 +692,46 @@ class FINErrorCode(str, Enum):
     INTERNAL_ERROR = "EITP_FIN_INTERNAL_ERROR"
 
 
-AnyErrorCode = Union[ErrorCode, IAMErrorCode, INVErrorCode, MDMErrorCode, WMSErrorCode, PURErrorCode, SALErrorCode, SECErrorCode, PLTErrorCode, PRODErrorCode, RELErrorCode, FINErrorCode]
+class BizOpsErrorCode(str, Enum):
+    """EITP BIZ-OPS 业务操作域错误码枚举 - 全部以 EITP_BIZ_ 前缀。"""
+
+    FEATURE_DISABLED = "EITP_BIZ_FEATURE_DISABLED"
+    FEATURE_KEY_FORMAT_INVALID = "EITP_BIZ_FEATURE_KEY_FORMAT_INVALID"
+    FEATURE_SCOPE_MISMATCH = "EITP_BIZ_FEATURE_SCOPE_MISMATCH"
+    FEATURE_NOT_FOUND = "EITP_BIZ_FEATURE_NOT_FOUND"
+    FEATURE_PARENT_NOT_FOUND = "EITP_BIZ_FEATURE_PARENT_NOT_FOUND"
+    RULE_KEY_DUPLICATE = "EITP_BIZ_RULE_KEY_DUPLICATE"
+    RULE_NOT_FOUND = "EITP_BIZ_RULE_NOT_FOUND"
+    RULE_EXPRESSION_INVALID = "EITP_BIZ_RULE_EXPRESSION_INVALID"
+    RULE_EXECUTION_TIMEOUT = "EITP_BIZ_RULE_EXECUTION_TIMEOUT"
+    RULE_VALIDATION_FAILED = "EITP_BIZ_RULE_VALIDATION_FAILED"
+    FLOW_NOT_FOUND = "EITP_BIZ_FLOW_NOT_FOUND"
+    FLOW_NODE_INVALID = "EITP_BIZ_FLOW_NODE_INVALID"
+    FLOW_STATE_TRANSITION_DENIED = "EITP_BIZ_FLOW_STATE_TRANSITION_DENIED"
+    FLOW_APPROVAL_DENIED = "EITP_BIZ_FLOW_APPROVAL_DENIED"
+    FLOW_ALREADY_PROCESSED = "EITP_BIZ_FLOW_ALREADY_PROCESSED"
+    FLOW_TIMEOUT = "EITP_BIZ_FLOW_TIMEOUT"
+    PRICING_STRATEGY_NOT_FOUND = "EITP_BIZ_PRICING_STRATEGY_NOT_FOUND"
+    PRICING_STRATEGY_EXPIRED = "EITP_BIZ_PRICING_STRATEGY_EXPIRED"
+    PRICING_CALCULATION_FAILED = "EITP_BIZ_PRICING_CALCULATION_FAILED"
+    PRICING_CONFLICT = "EITP_BIZ_PRICING_CONFLICT"
+    TAX_CONFIG_NOT_FOUND = "EITP_BIZ_TAX_CONFIG_NOT_FOUND"
+    TAX_RATE_INVALID = "EITP_BIZ_TAX_RATE_INVALID"
+    TAX_CALCULATION_FAILED = "EITP_BIZ_TAX_CALCULATION_FAILED"
+    INV_STRATEGY_NOT_FOUND = "EITP_BIZ_INV_STRATEGY_NOT_FOUND"
+    INV_STRATEGY_CHECK_FAILED = "EITP_BIZ_INV_STRATEGY_CHECK_FAILED"
+    CREDIT_EXCEEDED = "EITP_BIZ_CREDIT_EXCEEDED"
+    NEGATIVE_STOCK_INTERCEPTED = "EITP_BIZ_NEGATIVE_STOCK_INTERCEPTED"
+    OPERATION_NOT_FOUND = "EITP_BIZ_OPERATION_NOT_FOUND"
+    OPERATION_IDEMPOTENT_CONFLICT = "EITP_BIZ_OPERATION_IDEMPOTENT_CONFLICT"
+    AUDIT_RECORD_NOT_FOUND = "EITP_BIZ_AUDIT_RECORD_NOT_FOUND"
+    AUDIT_RECORD_IMMUTABLE = "EITP_BIZ_AUDIT_RECORD_IMMUTABLE"
+    LINKAGE_EXECUTION_FAILED = "EITP_BIZ_LINKAGE_EXECUTION_FAILED"
+    STRATEGY_RESOLVE_FAILED = "EITP_BIZ_STRATEGY_RESOLVE_FAILED"
+    INTERNAL_ERROR = "EITP_BIZ_INTERNAL_ERROR"
+
+
+AnyErrorCode = Union[ErrorCode, IAMErrorCode, INVErrorCode, MDMErrorCode, WMSErrorCode, PURErrorCode, SALErrorCode, SECErrorCode, PLTErrorCode, PRODErrorCode, RELErrorCode, FINErrorCode, BizOpsErrorCode]
 
 
 class DomainError(Exception):
@@ -755,6 +794,11 @@ class RELError(DomainError):
     pass
 
 
+class BizOpsError(DomainError):
+    """BIZ-OPS 领域错误。"""
+    pass
+
+
 class TenantContextError(DomainError):
     def __init__(self, message: str = "租户上下文无效或缺失") -> None:
         super().__init__(ErrorCode.TENANT_CONTEXT_INVALID, message)
@@ -811,6 +855,8 @@ def setup_exception_handlers(app: FastAPI) -> None:
 
 
 def _status_for_code(code: AnyErrorCode) -> int:
+    if isinstance(code, BizOpsErrorCode):
+        return _status_for_biz_ops_code(code)
     if isinstance(code, FINErrorCode):
         return _status_for_fin_code(code)
     if isinstance(code, RELErrorCode):
@@ -1630,6 +1676,68 @@ def _status_for_rel_code(code: RELErrorCode) -> int:
         return 500
     if code in _502_CODES:
         return 502
+    return 400
+
+
+def _status_for_biz_ops_code(code: BizOpsErrorCode) -> int:
+    _403_CODES = {
+        BizOpsErrorCode.FEATURE_DISABLED,
+        BizOpsErrorCode.FLOW_APPROVAL_DENIED,
+        BizOpsErrorCode.FLOW_STATE_TRANSITION_DENIED,
+        BizOpsErrorCode.CREDIT_EXCEEDED,
+        BizOpsErrorCode.NEGATIVE_STOCK_INTERCEPTED,
+        BizOpsErrorCode.AUDIT_RECORD_IMMUTABLE,
+    }
+    _404_CODES = {
+        BizOpsErrorCode.FEATURE_NOT_FOUND,
+        BizOpsErrorCode.FEATURE_PARENT_NOT_FOUND,
+        BizOpsErrorCode.RULE_NOT_FOUND,
+        BizOpsErrorCode.FLOW_NOT_FOUND,
+        BizOpsErrorCode.PRICING_STRATEGY_NOT_FOUND,
+        BizOpsErrorCode.TAX_CONFIG_NOT_FOUND,
+        BizOpsErrorCode.INV_STRATEGY_NOT_FOUND,
+        BizOpsErrorCode.OPERATION_NOT_FOUND,
+        BizOpsErrorCode.AUDIT_RECORD_NOT_FOUND,
+    }
+    _409_CODES = {
+        BizOpsErrorCode.RULE_KEY_DUPLICATE,
+        BizOpsErrorCode.FLOW_ALREADY_PROCESSED,
+        BizOpsErrorCode.OPERATION_IDEMPOTENT_CONFLICT,
+        BizOpsErrorCode.PRICING_CONFLICT,
+    }
+    _422_CODES = {
+        BizOpsErrorCode.FEATURE_KEY_FORMAT_INVALID,
+        BizOpsErrorCode.FEATURE_SCOPE_MISMATCH,
+        BizOpsErrorCode.RULE_EXPRESSION_INVALID,
+        BizOpsErrorCode.RULE_VALIDATION_FAILED,
+        BizOpsErrorCode.FLOW_NODE_INVALID,
+        BizOpsErrorCode.PRICING_STRATEGY_EXPIRED,
+        BizOpsErrorCode.PRICING_CALCULATION_FAILED,
+        BizOpsErrorCode.TAX_RATE_INVALID,
+        BizOpsErrorCode.TAX_CALCULATION_FAILED,
+        BizOpsErrorCode.INV_STRATEGY_CHECK_FAILED,
+        BizOpsErrorCode.STRATEGY_RESOLVE_FAILED,
+    }
+    _408_CODES = {
+        BizOpsErrorCode.RULE_EXECUTION_TIMEOUT,
+        BizOpsErrorCode.FLOW_TIMEOUT,
+    }
+    _500_CODES = {
+        BizOpsErrorCode.INTERNAL_ERROR,
+        BizOpsErrorCode.LINKAGE_EXECUTION_FAILED,
+    }
+    if code in _403_CODES:
+        return 403
+    if code in _404_CODES:
+        return 404
+    if code in _409_CODES:
+        return 409
+    if code in _422_CODES:
+        return 422
+    if code in _408_CODES:
+        return 408
+    if code in _500_CODES:
+        return 500
     return 400
 
 

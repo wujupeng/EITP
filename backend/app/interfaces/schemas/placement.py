@@ -22,7 +22,7 @@ class PlacementResponse(BaseModel):
 
 class MigrateRequest(BaseModel):
     target_placement: str = Field(..., examples=["dedicated_db", "dedicated_instance"])
-    maintenance_window: str = Field(..., examples="2026-01-01T02:00:00/2026-01-01T04:00:00")
+    maintenance_window: str = Field(..., examples=["2026-01-01T02:00:00/2026-01-01T04:00:00"])
 
 
 class MigrateResponse(BaseModel):

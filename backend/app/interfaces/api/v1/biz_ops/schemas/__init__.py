@@ -1,0 +1,1 @@
+"""BIZ-OPS Pydantic Schema。"""

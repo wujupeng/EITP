@@ -23,6 +23,7 @@ from app.interfaces.api.v1.sal import sal_router
 from app.interfaces.api.v1.sec import sec_router
 from app.interfaces.api.v1.tenant import router as tenant_router
 from app.interfaces.api.v1.wms import wms_router
+from app.interfaces.api.v1.biz_ops import biz_ops_router
 
 api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(hierarchy_router)
@@ -44,3 +45,4 @@ api_router.include_router(rel_router)
 api_router.include_router(sec_router)
 api_router.include_router(e2e_router)
 api_router.include_router(fin_routes)
+api_router.include_router(biz_ops_router)

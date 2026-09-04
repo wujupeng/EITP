@@ -193,5 +193,3 @@ async def list_enterprise_governance_requests(
         for orm in orms
     ]
 
-
-router.include_router(enterprise_router)

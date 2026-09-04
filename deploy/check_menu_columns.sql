@@ -1,2 +1,0 @@
-SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'iam_menu_tree' ORDER BY ordinal_position;
-SELECT table_name FROM information_schema.tables WHERE table_name LIKE '%menu%' ORDER BY table_name;
